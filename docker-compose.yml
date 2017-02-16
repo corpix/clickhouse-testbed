@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  server:
+    image: yandex/clickhouse-server
+    volumes:
+      - "data:/opt/clickhouse"
+      - "./etc/clickhouse/config.development.xml:/etc/clickhouse/config.xml"
+      - "./etc/clickhouse/users.development.xml:/etc/clickhouse/users.xml"
+    network_mode: host
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+  web:
+    image: rocket10/clickhouse/frontend
+    build: web
+    network_mode: host
+    volumes:
+      - "./etc/nginx/conf.d/clickhouse.conf:/etc/nginx/conf.d/clickhouse.conf"
+
+volumes:
+  data: {}
